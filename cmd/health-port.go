@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	server2 "github.com/pschulten/health-port/server"
+	"github.com/spf13/cobra"
 	"log"
 	"net/http"
 	"os"
@@ -9,6 +11,26 @@ import (
 	"syscall"
 	"time"
 )
+
+var rootCmd = &cobra.Command{
+	Use:   "health-port",
+	Short: "health-port - expose semantic health check",
+	Long:  `health-port - expose semantic health check by running a dummy server on healthiness`,
+	Run:   help,
+}
+
+func help(cmd *cobra.Command, args []string) {
+	cmd.Help()
+}
+
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
 
 func main() {
 	hps := server2.HealthPortServer{
