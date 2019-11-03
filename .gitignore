@@ -1,0 +1,13 @@
+.terraform
+*.tfstate*
+terraform.tfvars
+terraform/
+public/
+site/
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+health-port
