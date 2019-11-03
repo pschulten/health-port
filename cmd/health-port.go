@@ -1,7 +1,7 @@
-package main
+package cmd
 
 import (
-	server "github.com/pschulten/health-port"
+	server2 "github.com/pschulten/health-port/server"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	hps := server.HealthPortServer{
+	hps := server2.HealthPortServer{
 		Addr: ":1161",
 	}
 	c := make(chan os.Signal)

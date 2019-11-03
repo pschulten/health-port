@@ -1,4 +1,4 @@
-package healthport
+package server
 
 import (
 	"context"
