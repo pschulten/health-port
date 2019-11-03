@@ -68,7 +68,6 @@ func main() {
 			running = true
 		} else {
 			if running {
-				log.Printf("unhealthy endpoint: %s\n", endpoint)
 				hps.Shutdown()
 			}
 			running = false
@@ -81,6 +80,7 @@ func check() bool {
 	//res, err := http.Get("http://localhost:2015/index.html")
 	res, err := http.Get(endpoint)
 	if err != nil {
+		log.Printf("%s down: %v\n", endpoint, err)
 		return false
 	}
 
@@ -88,6 +88,7 @@ func check() bool {
 		log.Printf("Close response body failed???, ignoring: %v", err)
 	}
 	if res.StatusCode > 299 {
+		log.Printf("%s down: status code: %d \n", endpoint, res.StatusCode)
 		return false
 	}
 	return true
