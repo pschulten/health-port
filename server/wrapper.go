@@ -17,7 +17,7 @@ type HealthPortServer struct {
 	channel  chan struct{}
 }
 
-func (hps *HealthPortServer) ListenAndServe() error {
+func (hps *HealthPortServer) ListenAndServe() {
 	var server http.Server
 	addr := hps.Addr
 	if addr == "" {
@@ -52,10 +52,10 @@ func (hps *HealthPortServer) ListenAndServe() error {
 		select {
 		case <-quit:
 			fmt.Println("Got quit")
-			return nil
+			return
 		}
 	}
-	return nil
+	return
 }
 
 func (hps *HealthPortServer) Shutdown() {
