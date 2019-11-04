@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"crypto/tls"
 	"fmt"
 	server2 "github.com/pschulten/health-port/server"
 	"github.com/spf13/cobra"
@@ -13,14 +14,16 @@ import (
 )
 
 var (
-	addr     string
-	interval time.Duration
-	endpoint string
+	addr        string
+	interval    time.Duration
+	endpoint    string
+	insecureTls bool
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&addr, "addr", ":1161", "Port to expose")
-	rootCmd.PersistentFlags().DurationVar(&interval, "interval", 2*time.Second, "The amount of time between health checks")
+	rootCmd.PersistentFlags().StringVarP(&addr, "addr", "a", ":1161", "Port to expose")
+	rootCmd.PersistentFlags().DurationVarP(&interval, "interval", "i", 2*time.Second, "The amount of time between health checks")
+	rootCmd.PersistentFlags().BoolVarP(&insecureTls, "insecureTls", "k", false, "Allow insecure server connections when using SSL")
 }
 
 var rootCmd = &cobra.Command{
@@ -77,7 +80,10 @@ func main() {
 }
 
 func check() bool {
-	//res, err := http.Get("http://localhost:2015/index.html")
+	if insecureTls {
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
+
 	res, err := http.Get(endpoint)
 	if err != nil {
 		log.Printf("%s down: %v\n", endpoint, err)
